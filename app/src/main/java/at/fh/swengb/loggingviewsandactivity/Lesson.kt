@@ -1,7 +1,9 @@
 package at.fh.swengb.loggingviewsandactivity
 
 import android.os.strictmode.LeakedClosableViolation
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 class Lesson(
     val id: String,
     val name:String,
