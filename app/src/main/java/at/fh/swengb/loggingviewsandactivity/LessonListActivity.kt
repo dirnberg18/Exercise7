@@ -26,21 +26,33 @@ class LessonListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_list)
 
-        lessonAdapter.updateList(LessonRepository.lessonsList())
         lesson_recycler_view.layoutManager =
             LinearLayoutManager(this)// as RecyclerView.LayoutManager?
         lesson_recycler_view.adapter = lessonAdapter
 
         parseJson()
         SleepyAsyncTask().execute()
+
+        updatelist()
+    }
+
+    private fun updatelist() {
+        LessonRepository.lessonsList(
+            success = {
+                lessonAdapter.updateList(it) // handle success
+            },
+            error = {
+                Toast.makeText(this, "No list found", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == ADD_OR_EDITED_RESULT) {
-
-            lessonAdapter.updateList(LessonRepository.lessonsList())
+            updatelist()
             //Log.e("HALLO", "hallooo")
         }
     }
